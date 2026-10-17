@@ -43,6 +43,74 @@ class _Channels extends ChannelNotifier {
 }
 
 void main() {
+  for (final channel in <Channel?>[null, _Channels.channel]) {
+    testWidgets(
+      'home chat text reflects ${channel == null ? 'no selection' : 'the selected channel'}',
+      (tester) async {
+        tester.view.physicalSize = const Size(1264, 680);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              authNotifierProvider.overrideWith(_Auth.new),
+              workspaceProvider.overrideWith(_Workspaces.new),
+              channelProvider.overrideWith(_Channels.new),
+              selectedChannelProvider.overrideWithValue(channel),
+              orgCreditBalanceProvider.overrideWithValue(0),
+              channelScopeProvider.overrideWithValue((
+                userId: 'user',
+                workspaceId: 'workspace',
+              )),
+              starredChannelRepositoryProvider.overrideWithValue(
+                StarredChannelRepositoryImpl(MemoryStorage()),
+              ),
+            ],
+            child: buildTestMaterialApp(const HomeView()),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(
+          find.text(channel == null ? 'No channel selected' : '# general'),
+          findsOneWidget,
+        );
+        // The composer also uses the empty-state heading as its hint.
+        expect(
+          find.text(
+            channel == null ? 'Select a channel' : 'Welcome to #general',
+          ),
+          channel == null ? findsNWidgets(2) : findsOneWidget,
+        );
+        expect(
+          find.text(
+            channel == null
+                ? 'Choose a channel from the sidebar to start messaging.'
+                : 'Share all information relating to general here. All team members await you! 😉',
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.widgetWithText(
+            TextField,
+            channel == null ? 'Select a channel' : 'Message #general',
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.byType(ChannelStarButton),
+          channel == null ? findsNothing : findsOneWidget,
+        );
+        if (channel == null) {
+          expect(find.text('# general'), findsNothing);
+          expect(find.text('Welcome to #general'), findsNothing);
+        }
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   testWidgets(
     'home sidebar fills height and supports starring, directory and creation',
     (tester) async {

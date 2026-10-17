@@ -355,7 +355,7 @@ class _ChatArea extends ConsumerWidget {
           ],
           Flexible(
             child: Text(
-              '# ${channel?.name ?? 'general'}',
+              channel == null ? 'No channel selected' : '# ${channel.name}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -391,7 +391,9 @@ class _ChatArea extends ConsumerWidget {
           Icon(Icons.celebration, size: 60, color: colors.primary),
           const SizedBox(height: 24),
           Text(
-            'Welcome to #${channel?.name ?? 'general'}',
+            channel == null
+                ? 'Select a channel'
+                : 'Welcome to #${channel.name}',
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
@@ -400,7 +402,9 @@ class _ChatArea extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Share all information relating to ${channel?.name ?? 'general'} here. All team members await you! 😉',
+            channel == null
+                ? 'Choose a channel from the sidebar to start messaging.'
+                : 'Share all information relating to ${channel.name} here. All team members await you! 😉',
             style: TextStyle(fontSize: 16, color: colors.textPrimary),
           ),
           const SizedBox(height: 32),
