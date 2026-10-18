@@ -2,11 +2,11 @@
 
 Instructions for AI coding agents working in `zedu-desktop` (Flutter, targeting macOS, Windows and Linux).
 
-**Read `CONTRIBUTING.md` first.** It is the source of truth for the workflow: tickets, branches, PR titles, testing, CI tiers, PRs and secrets. This file adds only what an agent needs on top of it. Where the two disagree, `CONTRIBUTING.md` wins.
+**Read `CONTRIBUTING.md` first.** It is the source of truth for the workflow: tickets, branches, PR titles, testing, CI, PRs and secrets. This file adds only what an agent needs on top of it. Where the two disagree, `CONTRIBUTING.md` wins.
 
 ## Hard rules
 
-- Work only on a ticket branch in the contributor's fork. Never push to `dev`, `central-staging` or `main`, and never target `zeduchat` directly. PRs go into `zedu-hng/zedu-desktop:dev`.
+- Work only on a ticket branch in the team's org fork (not a personal fork). Never push to `dev`, `central-staging` or `main`, and never target `zeduchat` directly. PRs go into `zedu-hng/zedu-desktop:dev`.
 - Keep the change to what the ticket asks. No drive-by refactors, renames or dependency bumps.
 - Don't edit protected files (`.github/`, `AGENTS.md`, `CONTRIBUTING.md`, tooling config; full list in `CONTRIBUTING.md` Protected files). The **Protected files** check fails the PR unless a reviewer approved the change first.
 - One author per PR: commit only as the contributor, never mix in other people's commits.
@@ -67,4 +67,4 @@ New features follow the same `data/` → `domain/` → `presentation/` split.
 
 ## PRs
 
-The PR title follows Conventional Commits (see `CONTRIBUTING.md`) and becomes the squashed commit on `dev`. Fill in every section of the PR template, and add the one-line AI-usage note when AI did significant work.
+The PR title follows Conventional Commits (see `CONTRIBUTING.md`) and becomes the squashed commit on `dev`. Fill in every section of the PR template.
