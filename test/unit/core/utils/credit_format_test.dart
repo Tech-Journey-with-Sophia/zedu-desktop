@@ -19,6 +19,7 @@ void main() {
     });
 
     test('keeps the sign for a negative balance', () {
+      expect(formatAiCredits(-1), '-1 AI credit');
       expect(formatAiCredits(-1500), '-1,500 AI credits');
     });
   });

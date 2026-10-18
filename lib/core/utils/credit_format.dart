@@ -8,6 +8,6 @@ String formatAiCredits(int credits) {
       .toString()
       .replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (_) => ',');
   final sign = credits < 0 ? '-' : '';
-  final noun = credits == 1 ? 'credit' : 'credits';
+  final noun = credits.abs() == 1 ? 'credit' : 'credits';
   return '$sign$grouped AI $noun';
 }
