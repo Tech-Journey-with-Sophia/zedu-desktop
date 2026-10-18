@@ -9,6 +9,10 @@ final starredChannelRepositoryProvider = Provider<StarredChannelRepository>(
 final channelScopeProvider = Provider<({String userId, String workspaceId})?>((
   ref,
 ) {
+  if (!locator.isRegistered<AppConfig>() ||
+      !locator.isRegistered<SecureStorageService>()) {
+    return null;
+  }
   final auth = ref.watch(authNotifierProvider);
   final workspaceId = ref.watch(
     workspaceProvider.select((s) => s.selectedWorkspace?.id),
@@ -120,7 +124,9 @@ class StarredChannelNotifier extends Notifier<StarredChannelState> {
 
 final workspaceChannelsProvider = Provider<List<Channel>>((ref) {
   final scope = ref.watch(channelScopeProvider);
-  final channels = ref.watch(channelProvider.select((s) => s.channels));
+  final channels = ref.watch(
+    channelProvider.select((s) => s.value ?? const <Channel>[]),
+  );
   return channels.where((c) => c.organisationId == scope?.workspaceId).toList();
 });
 
@@ -148,10 +154,27 @@ final selectedChannelIdProvider =
     );
 
 final selectedChannelProvider = Provider<Channel?>((ref) {
-  final channels = ref.watch(workspaceChannelsProvider);
+  final channels = ref.watch(channelProvider).value ?? const <Channel>[];
   final id = ref.watch(selectedChannelIdProvider);
-  for (final channel in channels) {
-    if (channel.id == id) return channel;
+  if (id != null) {
+    for (final channel in channels) {
+      if (channel.id == id || channel.name == id) return channel;
+    }
+  }
+  final activeChat = ref.watch(activeChatProvider);
+  if (activeChat.type == ActiveChatType.channel && activeChat.id != null) {
+    for (final channel in channels) {
+      if (channel.id == activeChat.id || channel.name == activeChat.id) {
+        return channel;
+      }
+    }
+    return Channel(
+      id: activeChat.id!,
+      name: activeChat.id!,
+      description: '',
+      organisationId: '',
+      ownerId: '',
+    );
   }
   return channels.isEmpty ? null : channels.first;
 });

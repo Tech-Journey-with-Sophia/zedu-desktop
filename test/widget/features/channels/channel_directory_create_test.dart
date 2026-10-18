@@ -16,22 +16,20 @@ class _Workspaces extends WorkspaceNotifier {
 
 class _Channels extends ChannelNotifier {
   @override
-  ChannelState build() => ChannelState(
-    channels: [
-      Channel.fromJson({
-        'channels_id': 'general',
-        'name': 'general',
-        'description': '',
-        'organisation_id': 'workspace',
-        'owner_id': 'owner',
-      }),
-    ],
-  );
+  Future<List<Channel>> build() async => [
+    Channel.fromJson({
+      'channels_id': 'general',
+      'name': 'general',
+      'description': '',
+      'organisation_id': 'workspace',
+      'owner_id': 'owner',
+    }),
+  ];
 }
 
 class _EmptyChannels extends ChannelNotifier {
   @override
-  ChannelState build() => const ChannelState();
+  Future<List<Channel>> build() async => const <Channel>[];
 }
 
 Widget _host(Widget child, ChannelNotifier channels) => ProviderScope(

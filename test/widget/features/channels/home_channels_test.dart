@@ -18,20 +18,36 @@ class _Channels extends ChannelNotifier {
   static bool createSucceeds = false;
 
   @override
-  Future<bool> createChannel({
+  Future<Result<Channel>> createChannel({
     required String name,
     required String description,
     required bool isPrivate,
     String? topic,
-  }) async => createSucceeds;
+  }) async {
+    if (createSucceeds) {
+      return Success<Channel>(
+        Channel(
+          id: '1',
+          name: name,
+          description: description,
+          organisationId: 'workspace',
+          ownerId: 'user',
+        ),
+      );
+    }
+    return const Failure<Channel>(
+      ApiFailure(
+        message: 'Could not create channel.',
+        kind: ApiFailureKind.client,
+      ),
+    );
+  }
 
   @override
-  ChannelState build() => ChannelState(
-    channels: [
-      channel,
-      channel.copyWith(id: 'design', name: 'design'),
-    ],
-  );
+  Future<List<Channel>> build() async => [
+    channel,
+    channel.copyWith(id: 'design', name: 'design'),
+  ];
 
   static final channel = Channel.fromJson({
     'channels_id': 'general',
@@ -218,6 +234,8 @@ void main() {
       _Channels.createSucceeds = true;
       await tester.ensureVisible(find.text('Create'));
       await tester.tap(find.text('Create'));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(seconds: 5));
       await tester.pumpAndSettle();
       expect(find.byType(CreateChannelModal), findsNothing);
       expect(tester.takeException(), isNull);

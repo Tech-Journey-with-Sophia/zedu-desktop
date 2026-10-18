@@ -34,7 +34,8 @@ class ProfileSettingsShell extends ConsumerWidget {
     return FocusableActionDetector(
       autofocus: true,
       shortcuts: {
-        LogicalKeySet(LogicalKeyboardKey.escape): const _DismissSettingsIntent(),
+        LogicalKeySet(LogicalKeyboardKey.escape):
+            const _DismissSettingsIntent(),
       },
       actions: {
         _DismissSettingsIntent: CallbackAction<_DismissSettingsIntent>(
@@ -47,38 +48,38 @@ class ProfileSettingsShell extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
-        child: Column(
-          children: [
-            _ProfileTopBar(userName: userName),
-            Expanded(
-              child: Row(
-                children: [
-                  AppSidebarRail(
-                    activeType: null,
-                    settingsSelected: true,
-                    onTypeSelected: (type) {
-                      ref.read(homeSidebarProvider.notifier).setType(type);
-                      context.go(AppRouter.home);
-                    },
-                  ),
-                  _SettingsNavigation(
-                    userName: userName,
-                    selectedSection: selectedSection,
-                    onSectionSelected: onSectionSelected,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Expanded(child: child)],
+          child: Column(
+            children: [
+              _ProfileTopBar(userName: userName),
+              Expanded(
+                child: Row(
+                  children: [
+                    AppSidebarRail(
+                      activeType: null,
+                      settingsSelected: true,
+                      onTypeSelected: (type) {
+                        ref.read(homeSidebarProvider.notifier).setType(type);
+                        context.go(AppRouter.home);
+                      },
                     ),
-                  ),
-                ],
+                    _SettingsNavigation(
+                      userName: userName,
+                      selectedSection: selectedSection,
+                      onSectionSelected: onSectionSelected,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [Expanded(child: child)],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
     );
   }
 }

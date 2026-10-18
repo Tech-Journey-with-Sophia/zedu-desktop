@@ -18,15 +18,30 @@ class _Channels extends ChannelNotifier {
   static bool createSucceeds = true;
 
   @override
-  Future<bool> createChannel({
+  Future<Result<Channel>> createChannel({
     required String name,
     required String description,
     required bool isPrivate,
     String? topic,
-  }) async => createSucceeds;
+  }) async {
+    if (createSucceeds) {
+      return Success<Channel>(
+        Channel(
+          id: '1',
+          name: name,
+          description: description,
+          organisationId: 'workspace',
+          ownerId: 'user',
+        ),
+      );
+    }
+    return const Failure<Channel>(
+      ApiFailure(message: 'failed to create', kind: ApiFailureKind.client),
+    );
+  }
 
   @override
-  ChannelState build() => const ChannelState();
+  Future<List<Channel>> build() async => const <Channel>[];
 }
 
 class _CreateChannelLauncher extends StatelessWidget {

@@ -32,7 +32,7 @@ class _CreateChannelModalState extends ConsumerState<CreateChannelModal> {
     });
 
     final name = _nameController.text.trim();
-    final created = await ref
+    final result = await ref
         .read(channelProvider.notifier)
         .createChannel(
           name: name,
@@ -41,7 +41,7 @@ class _CreateChannelModalState extends ConsumerState<CreateChannelModal> {
           isPrivate: _isPrivate,
         );
     if (!mounted) return;
-    if (created) {
+    if (result is Success<Channel>) {
       AppToastService.show(
         context,
         type: AppToastType.success,
@@ -51,8 +51,11 @@ class _CreateChannelModalState extends ConsumerState<CreateChannelModal> {
     } else {
       setState(() {
         _isCreating = false;
-        _error =
-            'Could not create channel. Check your connection and workspace permissions, then try again.';
+        _error = result is Failure<Channel>
+            ? (result.error.message.isNotEmpty
+                  ? result.error.message
+                  : result.error.friendlyMessage)
+            : 'Could not create channel. Check your connection and workspace permissions, then try again.';
       });
     }
   }

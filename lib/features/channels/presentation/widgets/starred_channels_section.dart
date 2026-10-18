@@ -40,22 +40,25 @@ class _StarredChannelsSectionState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Semantics(
-          expanded: _expanded,
-          child: ListTile(
-            dense: true,
-            leading: Icon(
-              _expanded ? Icons.arrow_drop_down : Icons.arrow_right,
-              color: colors.onPrimary,
-              size: 20,
-            ),
-            title: Text(
-              'Starred',
-              style: context.textTheme.titleSmall?.copyWith(
+        Material(
+          color: Colors.transparent,
+          child: Semantics(
+            expanded: _expanded,
+            child: ListTile(
+              dense: true,
+              leading: Icon(
+                _expanded ? Icons.arrow_drop_down : Icons.arrow_right,
                 color: colors.onPrimary,
+                size: 20,
               ),
+              title: Text(
+                'Starred',
+                style: context.textTheme.titleSmall?.copyWith(
+                  color: colors.onPrimary,
+                ),
+              ),
+              onTap: () => setState(() => _expanded = !_expanded),
             ),
-            onTap: () => setState(() => _expanded = !_expanded),
           ),
         ),
         if (_expanded)
@@ -74,23 +77,28 @@ class ChannelSidebarItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = context.colors;
     final selected = ref.watch(selectedChannelProvider)?.id == channel.id;
-    return ListTile(
-      dense: true,
-      selected: selected,
-      selectedTileColor: colors.onPrimary.withValues(alpha: 0.12),
-      leading: Icon(
-        channel.isPrivate ? Icons.lock_outline : Icons.tag,
-        size: 18,
-        color: colors.onPrimary.withValues(alpha: 0.7),
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        dense: true,
+        selected: selected,
+        selectedTileColor: colors.onPrimary.withValues(alpha: 0.12),
+        leading: Icon(
+          channel.isPrivate ? Icons.lock_outline : Icons.tag,
+          size: 18,
+          color: colors.onPrimary.withValues(alpha: 0.7),
+        ),
+        title: Text(
+          channel.name,
+          overflow: TextOverflow.ellipsis,
+          style: context.textTheme.bodyMedium?.copyWith(
+            color: colors.onPrimary,
+          ),
+        ),
+        onTap: () {
+          ref.read(selectedChannelIdProvider.notifier).select(channel.id);
+        },
       ),
-      title: Text(
-        channel.name,
-        overflow: TextOverflow.ellipsis,
-        style: context.textTheme.bodyMedium?.copyWith(color: colors.onPrimary),
-      ),
-      onTap: () {
-        ref.read(selectedChannelIdProvider.notifier).select(channel.id);
-      },
     );
   }
 }
