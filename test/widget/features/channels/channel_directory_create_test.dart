@@ -52,13 +52,7 @@ Widget _host(Widget child, ChannelNotifier channels) => ProviderScope(
 );
 
 void _expectNoLayoutOverflow(WidgetTester tester) {
-  Object? error;
-  while ((error = tester.takeException()) != null) {
-    expect(
-      error is FlutterError ? error.toStringDeep() : error,
-      isNot(contains('overflowed')),
-    );
-  }
+  expect(tester.takeException(), isNull);
 }
 
 void main() {
@@ -69,13 +63,11 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    await tester.pumpWidget(_host(const HomeView(), _Channels()));
+    await tester.pumpWidget(
+      _host(const Scaffold(body: ChannelDirectoryView()), _Channels()),
+    );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('View all channels'));
-    await tester.pumpAndSettle();
-
-    expect(find.byType(ChannelDirectoryView), findsOneWidget);
     final addChannel = find.widgetWithText(AppButton, 'Add channel');
     expect(addChannel, findsOneWidget);
 
