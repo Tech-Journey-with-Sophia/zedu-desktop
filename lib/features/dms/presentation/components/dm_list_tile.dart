@@ -58,7 +58,7 @@ class DmListTile extends ConsumerWidget {
                   : null,
               child: conversation.effectiveAvatarUrl == null
                   ? Text(
-                      conversation.displayName.isNotEmpty
+                      conversation.username.isNotEmpty
                           ? conversation.displayName[0].toUpperCase()
                           : '?',
                       style: const TextStyle(
