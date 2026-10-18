@@ -120,5 +120,47 @@ void main() {
       expect(capturedEmail, 'user@example.com');
       expect(capturedPassword, 'Secret123');
     });
+
+    testWidgets(
+      'horizontally centers login with magic link link beneath login button',
+      (tester) async {
+        const surfaceSizes = [Size(1440, 1024), Size(800, 600)];
+        addTearDown(() => tester.binding.setSurfaceSize(null));
+
+        for (final size in surfaceSizes) {
+          await tester.binding.setSurfaceSize(size);
+
+          await tester.pumpWidget(buildLoginViewUnderTest());
+          await tester.pump();
+
+          final loginButton = find.widgetWithText(ElevatedButton, 'Login');
+          final magicLink = find.text('Login with magic link');
+
+          expect(loginButton, findsOneWidget);
+          expect(magicLink, findsOneWidget);
+
+          final buttonCenter = tester.getCenter(loginButton);
+          final magicLinkCenter = tester.getCenter(magicLink);
+
+          expect(
+            (buttonCenter.dx - magicLinkCenter.dx).abs(),
+            lessThanOrEqualTo(1.0),
+            reason:
+                'Login with magic link should be horizontally centered beneath Login button at $size',
+          );
+
+          final loginAppButton = find.widgetWithText(AppButton, 'Login');
+          final magicLinkInkWell = find.ancestor(
+            of: magicLink,
+            matching: find.byType(InkWell),
+          );
+          expect(
+            tester.getRect(magicLinkInkWell).top,
+            greaterThan(tester.getRect(loginAppButton).bottom),
+            reason: 'magic link should be positioned below the login button',
+          );
+        }
+      },
+    );
   });
 }
