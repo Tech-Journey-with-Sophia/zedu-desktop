@@ -60,6 +60,7 @@ class _BuyCreditsViewState extends ConsumerState<BuyCreditsView> {
         ref.read(userProfileNotifierProvider.notifier).selectSection(section);
         context.go(AppRouter.profile);
       },
+      onDismiss: () => context.go(AppRouter.home),
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(28, 32, 40, 48),
         child: Align(
