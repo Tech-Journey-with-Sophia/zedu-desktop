@@ -44,7 +44,9 @@ class _DesktopManagerState extends ConsumerState<DesktopManager>
     try {
       final String trayIcon = DesktopManager.defaultTrayIconPath;
       await trayManager.setIcon(trayIcon);
-      await trayManager.setToolTip('Zedu');
+      if (!Platform.isLinux) {
+        await trayManager.setToolTip('Zedu');
+      }
 
       Menu menu = Menu(
         items: [
