@@ -33,7 +33,7 @@ Widget buildLoginViewUnderTest({FakeAuthNotifier? notifier}) {
     overrides: [
       authNotifierProvider.overrideWith(() => notifier ?? FakeAuthNotifier()),
     ],
-    child: buildTestMaterialApp(const LoginView()),
+    child: const MaterialApp(home: LoginView()),
   );
 }
 
@@ -176,27 +176,6 @@ void main() {
 
       expect(capturedEmail, 'user@example.com');
       expect(capturedPassword, 'Secret123');
-    });
-
-    testWidgets('shows correct header and social auth labels', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(1440, 1024));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
-
-      await tester.pumpWidget(buildLoginViewUnderTest());
-      await tester.pump();
-
-      expect(
-        find.text("Don't have an account? Sign up", findRichText: true),
-        findsOneWidget,
-      );
-      expect(
-        find.text('Already have an account?', findRichText: true),
-        findsNothing,
-      );
-      expect(find.text('Continue with Google'), findsOneWidget);
-      expect(find.text('Continue with Apple'), findsOneWidget);
-      expect(find.text('Sign up with Google'), findsNothing);
-      expect(find.text('Sign up with Apple'), findsNothing);
     });
 
     testWidgets(

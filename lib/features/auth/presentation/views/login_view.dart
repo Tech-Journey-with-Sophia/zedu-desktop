@@ -79,7 +79,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               Image.asset('assets/pngs/zedu_logo.png', width: 83, height: 31),
               Text.rich(
                 TextSpan(
-                  text: "Don't have an account? ",
+                  text: 'Already have an account? ',
                   style: context.textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w400,
                     color: context.colors.textPrimary,
@@ -123,14 +123,14 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 context.gapV(32),
                 SocialAuthButton(
                   icon: 'assets/svgs/google_logo.svg',
-                  label: 'Continue with Google',
+                  label: 'Sign up with Google',
                   onPressed: () =>
                       ref.read(authNotifierProvider.notifier).loginWithGoogle(),
                 ),
                 context.gapV(12),
                 SocialAuthButton(
                   icon: 'assets/svgs/apple_logo.svg',
-                  label: 'Continue with Apple',
+                  label: 'Sign up with Apple',
                   onPressed: () => AppToastService.show(
                     context,
                     type: AppToastType.info,
